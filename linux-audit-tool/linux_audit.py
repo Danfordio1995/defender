@@ -231,6 +231,7 @@ class LinuxAuditTool:
         logger.info("Starting security audit...")
         auditor = SecurityAuditor(self.config)
         self.audit_data['security'] = auditor.audit()
+        self.audit_data['timeline'].extend(auditor.timeline_events)
         self.audit_data['alerts'].extend(auditor.alerts)
         logger.info("Security audit completed")
     
