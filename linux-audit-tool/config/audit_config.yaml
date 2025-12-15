@@ -1,0 +1,153 @@
+# Linux Audit Tool Configuration
+# ================================
+
+# General Settings
+general:
+  output_dir: "/var/log/linux-audit-tool"
+  report_format: "html"  # Options: html, json, csv, txt
+  log_level: "INFO"      # Options: DEBUG, INFO, WARNING, ERROR
+  date_format: "%Y-%m-%d %H:%M:%S"
+  timezone: "UTC"
+
+# Log Paths to Analyze
+log_paths:
+  auth_log: "/var/log/auth.log"
+  auth_log_alt: "/var/log/secure"
+  syslog: "/var/log/syslog"
+  messages: "/var/log/messages"
+  audit_log: "/var/log/audit/audit.log"
+  kern_log: "/var/log/kern.log"
+  dmesg: "/var/log/dmesg"
+  btmp: "/var/log/btmp"
+  wtmp: "/var/log/wtmp"
+  lastlog: "/var/log/lastlog"
+  faillog: "/var/log/faillog"
+  cron_log: "/var/log/cron"
+  mail_log: "/var/log/mail.log"
+  apache_access: "/var/log/apache2/access.log"
+  apache_error: "/var/log/apache2/error.log"
+  nginx_access: "/var/log/nginx/access.log"
+  nginx_error: "/var/log/nginx/error.log"
+  mysql_log: "/var/log/mysql/error.log"
+  postgresql_log: "/var/log/postgresql/*.log"
+  ssh_log: "/var/log/ssh.log"
+  sudo_log: "/var/log/sudo.log"
+  apt_log: "/var/log/apt/history.log"
+  dpkg_log: "/var/log/dpkg.log"
+  yum_log: "/var/log/yum.log"
+  dnf_log: "/var/log/dnf.log"
+
+# User Audit Settings
+user_audit:
+  enabled: true
+  track_logins: true
+  track_failed_logins: true
+  track_sudo_usage: true
+  track_ssh_sessions: true
+  track_shell_commands: true
+  track_user_modifications: true
+  track_password_changes: true
+  track_group_changes: true
+  history_files:
+    - ".bash_history"
+    - ".zsh_history"
+    - ".sh_history"
+  max_history_lines: 10000
+
+# System Audit Settings
+system_audit:
+  enabled: true
+  track_file_changes: true
+  track_permission_changes: true
+  track_package_changes: true
+  track_service_changes: true
+  track_kernel_changes: true
+  track_cron_changes: true
+  critical_files:
+    - "/etc/passwd"
+    - "/etc/shadow"
+    - "/etc/sudoers"
+    - "/etc/sudoers.d/*"
+    - "/etc/ssh/sshd_config"
+    - "/etc/pam.d/*"
+    - "/etc/hosts"
+    - "/etc/hosts.allow"
+    - "/etc/hosts.deny"
+    - "/etc/crontab"
+    - "/etc/cron.d/*"
+    - "/etc/cron.daily/*"
+    - "/etc/cron.hourly/*"
+    - "/etc/cron.weekly/*"
+    - "/etc/cron.monthly/*"
+    - "/etc/fstab"
+    - "/etc/exports"
+    - "/etc/group"
+    - "/etc/gshadow"
+    - "/etc/login.defs"
+    - "/etc/securetty"
+    - "/etc/security/*"
+    - "/etc/profile"
+    - "/etc/bashrc"
+    - "/etc/environment"
+  critical_directories:
+    - "/root"
+    - "/home"
+    - "/etc"
+    - "/var/spool/cron"
+    - "/var/www"
+    - "/opt"
+
+# Network Audit Settings
+network_audit:
+  enabled: true
+  track_connections: true
+  track_source_ips: true
+  track_failed_connections: true
+  track_firewall_changes: true
+  track_dns_queries: true
+  suspicious_ports:
+    - 4444   # Metasploit default
+    - 5555   # Common backdoor
+    - 6666   # Common backdoor
+    - 6667   # IRC (potential C2)
+    - 31337  # Elite/Backdoor
+    - 12345  # NetBus
+    - 27374  # SubSeven
+    - 1337   # Common hacker port
+  geo_ip_enabled: true
+  geo_ip_database: "/usr/share/GeoIP/GeoLite2-City.mmdb"
+
+# Security Audit Settings
+security_audit:
+  enabled: true
+  check_rootkits: true
+  check_setuid_files: true
+  check_world_writable: true
+  check_unowned_files: true
+  check_hidden_processes: true
+  check_suspicious_crons: true
+  check_ssh_keys: true
+  check_open_ports: true
+  check_active_connections: true
+  check_listening_services: true
+
+# Alert Settings
+alerts:
+  enabled: true
+  email_enabled: false
+  email_recipients:
+    - "admin@example.com"
+  smtp_server: "localhost"
+  smtp_port: 25
+  slack_enabled: false
+  slack_webhook: ""
+  severity_threshold: "WARNING"  # Options: INFO, WARNING, CRITICAL
+
+# Report Settings
+reports:
+  generate_summary: true
+  generate_detailed: true
+  include_charts: true
+  include_timeline: true
+  retention_days: 90
+  compress_old_reports: true
