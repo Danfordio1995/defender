@@ -104,12 +104,14 @@ class LinuxAuditTool:
         )
         logger.setLevel(log_level)
     
-    def _setup_output_dir(self):
-        """Create output directory if it doesn't exist."""
-        output_dir = self.config.get('general', {}).get(
-            'output_dir', 
-            '/var/log/linux-audit-tool'
-        )
+    def _setup_output_dir(self, output_dir: Optional[str] = None):
+        """Create output directories if they don't exist."""
+        if output_dir is None:
+            output_dir = self.config.get('general', {}).get(
+                'output_dir',
+                '/var/log/linux-audit-tool'
+            )
+
         os.makedirs(output_dir, exist_ok=True)
         os.makedirs(os.path.join(output_dir, 'reports'), exist_ok=True)
         os.makedirs(os.path.join(output_dir, 'data'), exist_ok=True)
@@ -231,6 +233,7 @@ class LinuxAuditTool:
         logger.info("Starting security audit...")
         auditor = SecurityAuditor(self.config)
         self.audit_data['security'] = auditor.audit()
+        self.audit_data['timeline'].extend(auditor.timeline_events)
         self.audit_data['alerts'].extend(auditor.alerts)
         logger.info("Security audit completed")
     
@@ -407,8 +410,7 @@ Examples:
     
     # Override output directory if specified
     if args.output:
-        audit_tool.output_dir = args.output
-        os.makedirs(args.output, exist_ok=True)
+        audit_tool._setup_output_dir(args.output)
     
     # Run selected audits
     try:
